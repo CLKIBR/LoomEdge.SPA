@@ -40,19 +40,7 @@ interface IUser {
 })
 export class MaterialTypeDefinitionsComponent {
   public users: IUser[] = [
-    {
-      name: 'ibrahim çelik',
-      state: 'New',
-      registered: '20/10/1985',
-      country: 'Tr',
-      usage: 50,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Mastercard',
-      activity: '10 sec ago',
-      avatar: './assets/images/avatars/3.jpg',
-      status: 'success',
-      color: 'success'
-    },
+    
     {
       name: 'Yiorgos Avraamu',
       state: 'New',
@@ -63,6 +51,19 @@ export class MaterialTypeDefinitionsComponent {
       payment: 'Mastercard',
       activity: '10 sec ago',
       avatar: './assets/images/avatars/1.jpg',
+      status: 'success',
+      color: 'success'
+    },
+    {
+      name: 'ibrahim çelik',
+      state: 'New',
+      registered: '20/10/1985',
+      country: 'Tr',
+      usage: 50,
+      period: 'Jun 11, 2021 - Jul 10, 2021',
+      payment: 'Mastercard',
+      activity: '10 sec ago',
+      avatar: './assets/images/avatars/3.jpg',
       status: 'success',
       color: 'success'
     },

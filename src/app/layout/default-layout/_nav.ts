@@ -116,7 +116,7 @@ export const navItems: INavData[] = [
         icon: 'nav-icon-bullet'
       },
       {
-        name: 'Etiket Tasrımı',
+        name: 'Etiket Tasarımı',
         url: '/management/label-design',
         icon: 'nav-icon-bullet'
       },
