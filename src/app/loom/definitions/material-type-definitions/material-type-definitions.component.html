@@ -1,63 +1,92 @@
-<c-row>
-    <c-col xs>
-        <c-card class="mb-4">
-            <c-card-body>
-                <table [hover]="true" [responsive]="true" [striped]="true" align="middle" cTable class="mb-0 border">
-                    <thead class="text-nowrap text-truncate">
-                        <tr>
-                            <th class="bg-body-tertiary text-center ">
-                                <svg cIcon name="cilPeople"></svg>
-                            </th>
-                            <th class="bg-body-tertiary">User</th>
-                            <th class="bg-body-tertiary text-center">Country</th>
-                            <th class="bg-body-tertiary">Usage</th>
-                            <th class="bg-body-tertiary text-center">Payment Method</th>
-                            <th class="bg-body-tertiary">Activity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (user of users; track user.name; let i = $index) {
-                        <tr>
-                            <td class="text-center">
-                                <c-avatar [size]="'md'" src="{{ user.avatar }}" status="{{ user.status }}" />
-                            </td>
-                            <td>
-                                <div>{{ user.name }}</div>
-                                <div class="small text-body-secondary text-nowrap">
-                                    <span>
-                                        {{ user.state }} | Registered: {{ user.registered }}
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <svg cIcon id="{{ user.country + user.name }}" name="cif{{ user.country }}" size="xl"
-                                    title="{{ user.country }}"></svg>
-                            </td>
-                            <td>
-                                <div class="d-flex justify-content-between">
-                                    <div class="float-start">
-                                        <strong>{{ user.usage }}%</strong>
-                                    </div>
-                                    <div class="float-end ms-1 text-nowrap">
-                                        <small class="text-body-secondary">
-                                            {{ user.period }}
-                                        </small>
-                                    </div>
-                                </div>
-                                <c-progress thin [value]="user.usage" color="{{ user.color }}" aria-label="Usage" />
-                            </td>
-                            <td class="text-center">
-                                <svg cIcon name="cibCc{{ user.payment }}" size="xl"></svg>
-                            </td>
-                            <td>
-                                <div class="small text-body-secondary">Last login</div>
-                                <div class="fw-semibold text-nowrap">{{ user.activity }}</div>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </c-card-body>
-        </c-card>
-    </c-col>
-</c-row>
+<!-- <c-modal alignment="center" size="xl" [transition]="false" class="position-static d-block">
+    <c-modal-header>
+        <h5 cModalTitle>Malzeme Tip Tanımı</h5>
+        <button cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body class="modal-scrollable">
+        <ng-container *ngTemplateOutlet="MalTypeTbl"></ng-container>
+    </c-modal-body>
+    <c-modal-footer>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button cButton color="success" variant="outline">Ekle</button>
+            <button cButton color="warning" variant="outline">Değiştir</button>
+            <button cButton color="danger" variant="outline">Sil</button>
+        </div>
+    </c-modal-footer>
+</c-modal> -->
+
+<c-container breakpoint="xxl">
+    <c-row>
+        <c-col>
+            <c-card [cBorder]="{top: {color: 'warning', width: 3}}" class="mb-3">
+                <c-card-header>
+                    <h5 cModalTitle>Malzeme Tip Tanımı</h5>
+                </c-card-header>
+                <c-card-body class="modal-scrollable">
+                    <ng-container *ngTemplateOutlet="MalTypeTbl"></ng-container>
+                </c-card-body>
+                <c-card-footer>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button cButton color="success" variant="outline">Ekle</button>
+                        <button cButton color="warning" variant="outline">Değiştir</button>
+                        <button cButton color="danger" variant="outline">Sil</button>
+                    </div>
+                </c-card-footer>
+            </c-card>
+        </c-col>
+    </c-row>
+</c-container>
+
+<ng-template #MalTypeTbl>
+    <table [hover]="true" [responsive]="true" [striped]="true" align="middle" cTable class="mb-0 border">
+        <thead class="text-nowrap text-truncate">
+            <tr>
+                <th class="bg-body-tertiary text-center ">
+                    <svg cIcon name="cilPeople"></svg>
+                </th>
+                <th class="bg-body-tertiary">Tip Adı</th>
+                <th class="bg-body-tertiary text-center">Tip Kodu</th>
+                <th class="bg-body-tertiary">Kullanım</th>
+                <th class="bg-body-tertiary">Açıklama</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (malType of malTypes; track malType.name; let i = $index) {
+            <tr>
+                <td class="text-center">
+                    <c-avatar [size]="'md'" src='{{malType.url}}' status='success' />
+                </td>
+                <td>
+                    <div class="fw-semibold">{{ malType.name }}</div>
+                    <div class="small text-body-secondary text-nowrap">
+                        <span>
+                            Ekleme Tarihi: {{ malType.createdDate }}
+                        </span>
+                    </div>
+                </td>
+                <td class="text-center fw-semibold">
+                    <div>{{ malType.code }}</div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-between">
+                        <div class="float-start">
+                            <strong>{{malType.amount}}%</strong>
+                        </div>
+                        <div class="float-end ms-1 text-nowrap">
+                            <small class="text-body-secondary">
+                                Depo Kullanım Miktarı
+                            </small>
+                        </div>
+                    </div>
+                    <c-progress thin [value]="malType.amount" color="success" aria-label="Usage" />
+                </td>
+
+                <td>
+                    <div class="small text-body-secondary">Kullanımda</div>
+                    <div class=" text-nowrap">{{malType.description}}</div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</ng-template>

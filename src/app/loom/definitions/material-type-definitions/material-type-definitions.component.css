@@ -1,0 +1,4 @@
+.modal-scrollable {
+    max-height: 445px;
+    overflow-y: auto;
+}

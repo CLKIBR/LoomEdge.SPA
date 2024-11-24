@@ -1,138 +1,42 @@
-
-import { Component } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import {
-  AvatarComponent,
-  CardBodyComponent,
-  CardComponent,
-  ColComponent,
-  ProgressBarDirective,
-  ProgressComponent,
-  RowComponent,
-  TableDirective,
-  TextColorDirective
-} from '@coreui/angular';
+import { AlertModule, AvatarComponent, ButtonModule, CardBodyComponent, CardComponent, CardModule, ColComponent,  FormModule, GridModule, ModalComponent, ModalModule, ProgressBarDirective, ProgressComponent, RowComponent, TableDirective, TableModule, TextColorDirective, ThemeDirective, UtilitiesModule } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
-
-interface IUser {
-  name: string;
-  state: string;
-  registered: string;
-  country: string;
-  usage: number;
-  period: string;
-  payment: string;
-  activity: string;
-  avatar: string;
-  status: string;
-  color: string;
-}
+import {MalType} from 'src/app/models/mal-type'
+import {MalTypeService} from 'src/app/service/mal-type.service'
 
 @Component({
   selector: 'app-material-type-definitions',
   standalone: true,
-  imports: [TextColorDirective, CardComponent, CardBodyComponent, 
-    RowComponent, ColComponent, IconDirective, ReactiveFormsModule,
-    ProgressBarDirective, ProgressComponent,TableDirective, AvatarComponent],
   templateUrl: './material-type-definitions.component.html',
-  styleUrl: './material-type-definitions.component.scss'
+  styleUrls: ['./material-type-definitions.component.css'],
+  imports: [AlertModule,GridModule,FormModule,CardModule,TableModule, 
+    UtilitiesModule,AvatarComponent,ProgressComponent,HttpClientModule,
+    TextColorDirective,IconDirective, ReactiveFormsModule, ProgressBarDirective, 
+    ProgressComponent, TableDirective, AvatarComponent,ModalModule,ModalComponent,
+    ThemeDirective,ButtonModule,NgTemplateOutlet ],
+  providers:[MalTypeService]
 })
-export class MaterialTypeDefinitionsComponent {
-  public users: IUser[] = [
-    
-    {
-      name: 'Yiorgos Avraamu',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Us',
-      usage: 50,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Mastercard',
-      activity: '10 sec ago',
-      avatar: './assets/images/avatars/1.jpg',
-      status: 'success',
-      color: 'success'
-    },
-    {
-      name: 'ibrahim çelik',
-      state: 'New',
-      registered: '20/10/1985',
-      country: 'Tr',
-      usage: 50,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Mastercard',
-      activity: '10 sec ago',
-      avatar: './assets/images/avatars/3.jpg',
-      status: 'success',
-      color: 'success'
-    },
-    {
-      name: 'Avram Tarasios',
-      state: 'Recurring ',
-      registered: 'Jan 1, 2021',
-      country: 'Br',
-      usage: 10,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Visa',
-      activity: '5 minutes ago',
-      avatar: './assets/images/avatars/2.jpg',
-      status: 'danger',
-      color: 'info'
-    },
-    {
-      name: 'Quintin Ed',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'In',
-      usage: 74,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Stripe',
-      activity: '1 hour ago',
-      avatar: './assets/images/avatars/3.jpg',
-      status: 'warning',
-      color: 'warning'
-    },
-    {
-      name: 'Enéas Kwadwo',
-      state: 'Sleep',
-      registered: 'Jan 1, 2021',
-      country: 'Fr',
-      usage: 98,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Paypal',
-      activity: 'Last month',
-      avatar: './assets/images/avatars/4.jpg',
-      status: 'secondary',
-      color: 'danger'
-    },
-    {
-      name: 'Agapetus Tadeáš',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Es',
-      usage: 22,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'ApplePay',
-      activity: 'Last week',
-      avatar: './assets/images/avatars/5.jpg',
-      status: 'success',
-      color: 'primary'
-    },
-    {
-      name: 'Friderik Dávid',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Pl',
-      usage: 43,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Amex',
-      activity: 'Yesterday',
-      avatar: './assets/images/avatars/6.jpg',
-      status: 'info',
-      color: 'dark'
-    }
-  ];
+export class MaterialTypeDefinitionsComponent implements OnInit {
+  public visible = false;
+  malTypes: MalType[] = [];
 
+  constructor(private malTypeService: MalTypeService) { }
+
+  ngOnInit() {
+    this.malTypeService.getMalType(0, 10).subscribe((response: any) => {
+      this.malTypes = response.items; // Servisten dönen items listesini malTypes'e aktarıyoruz
+    })
+  }
+
+  toggleLiveDemo() {
+    this.visible = !this.visible;
+  }
+
+  handleLiveDemoChange(event: any) {
+    this.visible = event;
+  }
 
 }
