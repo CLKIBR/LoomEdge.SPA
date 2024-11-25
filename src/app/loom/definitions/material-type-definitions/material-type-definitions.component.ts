@@ -110,7 +110,6 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
     }
   }
 
-  // ⚡ Eklenen/Değiştirilen Kodlar ⚡
   cancelDelete(): void {
     this.isDeleteModalVisible = false; // Modal'ı kapat
     this.malTypeToDelete = null; // Silme işlemini iptal et
@@ -121,7 +120,6 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
     return item.id ?? '';
   }
 
-  // material-type-definitions.component.ts dosyasına silme işlemi ekliyoruz
   deleteSelectedMalType(): void {
     if (this.selectedMalType) {
       this.malTypeService.deleteMalType(this.selectedMalType).subscribe(
@@ -148,6 +146,36 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
 
   handleLiveDemoChange(event: any) {
     this.visible = event;
+  }
+
+  openAddMalTypeModal(): void {
+    this.isEditMode = false; // Düzenleme modu değil
+    this.malTypeForm.reset(); // Formu sıfırlıyoruz
+    this.visible = true; // Modal'ı göster
+  }
+
+  toggleNewMalTypeModal() {
+    this.visible = !this.visible;  // Modal'ın görünürlüğünü değiştiriyoruz
+  }
+
+  saveNewMalType(): void {
+    if (this.malTypeForm.valid) {
+      const newMalType = this.malTypeForm.value; // Formdaki veriyi alıyoruz
+  
+      this.malTypeService.addMalType(newMalType).subscribe(
+        (response) => {
+          console.log('Yeni Malzeme Tipi Eklendi:', response);
+          this.malTypes.push(response); // Listeye ekliyoruz
+          this.visible = false; // Modal'ı kapatıyoruz
+          this.malTypeForm.reset(); // Formu sıfırlıyoruz
+        },
+        (error) => {
+          console.error('Yeni Malzeme Tipi eklenirken hata oluştu:', error);
+        }
+      );
+    } else {
+      console.log('Form geçersiz!');
+    }
   }
 
 }

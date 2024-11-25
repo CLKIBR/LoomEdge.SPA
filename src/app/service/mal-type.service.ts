@@ -50,4 +50,16 @@ export class MalTypeService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     });
   }
+
+  addMalType(newMalType: any): Observable<any> {
+    const url = `${this.path}/MalTypes`; // API'nin POST endpoint'i
+    return this.httpClient.post<any>(url, newMalType, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).pipe(
+      catchError(error => {
+        console.error("Yeni malzeme tipi eklenirken hata oluştu:", error);
+        return of({ error: "Yeni malzeme tipi eklenirken hata oluştu" });  // Hata durumunda geri dönülecek bir değer
+      })
+    );
+  }
 }
