@@ -2,7 +2,3 @@
     max-height: 445px;
     overflow-y: auto;
 }
-
-tr.selected {
-    background-color: yellow;
-  }

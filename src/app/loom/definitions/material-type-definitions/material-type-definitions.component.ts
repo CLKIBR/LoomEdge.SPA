@@ -16,7 +16,7 @@ import { MalTypeService } from 'src/app/service/mal-type.service';
     UtilitiesModule, AvatarComponent, ProgressComponent, HttpClientModule,
     TextColorDirective, IconDirective, ReactiveFormsModule, ProgressBarDirective,
     ProgressComponent, TableDirective, AvatarComponent, ModalModule
-    , ButtonModule, NgTemplateOutlet, NgClass, NgFor],
+    , ButtonModule, NgTemplateOutlet, NgFor],
   providers: [MalTypeService]
 })
 export class MaterialTypeDefinitionsComponent implements OnInit {
@@ -24,6 +24,8 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
   public visible = false;
   malTypes: MalType[] = [];
   selectedMalType?: string | null = null;
+  malTypeToDelete?: MalType | null = null; 
+  isDeleteModalVisible: boolean = false;
 
   constructor(private malTypeService: MalTypeService) { }
 
@@ -37,6 +39,35 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
     this.selectedMalType = this.selectedMalType === malType.id ? null : malType.id;
     console.log('Seçilen Malzeme Tipi ID:', this.selectedMalType);
     console.log('Tıklanan Malzeme Tipi ID:', malType.id);
+  }
+
+  deleteConfirmation(selectedId: string | null): void {
+    if (selectedId) {
+      this.malTypeToDelete =
+        this.malTypes.find((malType) => malType.id === selectedId) || null;
+      this.isDeleteModalVisible = true; // Modal'ı aç
+    }
+  }
+
+  confirmDelete(): void {
+    if (this.malTypeToDelete) {
+      this.malTypeService.deleteMalType(this.malTypeToDelete.id!).subscribe(
+        () => {
+          this.malTypes = this.malTypes.filter(
+            (malType) => malType.id !== this.malTypeToDelete?.id
+          );
+          this.malTypeToDelete = null;
+          this.isDeleteModalVisible = false; // Modal'ı kapat
+        },
+        (error) => console.error('Silme işlemi başarısız oldu', error)
+      );
+    }
+  }
+
+  // ⚡ Eklenen/Değiştirilen Kodlar ⚡
+  cancelDelete(): void {
+    this.isDeleteModalVisible = false; // Modal'ı kapat
+    this.malTypeToDelete = null; // Silme işlemini iptal et
   }
 
   trackById(index: number, item: MalType): string {

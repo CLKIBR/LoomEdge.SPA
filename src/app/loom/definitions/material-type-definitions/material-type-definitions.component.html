@@ -12,13 +12,39 @@
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button cButton color="success" variant="outline">Ekle</button>
                         <button cButton color="warning" variant="outline">Değiştir</button>
-                        <button cButton color="danger" variant="outline" (click)="deleteSelectedMalType()">Sil</button>
+                        <button cButton color="danger" variant="outline"
+                            (click)="deleteConfirmation(selectedMalType || null)" [disabled]="!selectedMalType">
+                            Sil
+                        </button>
                     </div>
                 </c-card-footer>
             </c-card>
         </c-col>
     </c-row>
 </c-container>
+
+<c-modal [(visible)]="isDeleteModalVisible" [backdrop]="true"  alignment="center" centered closeable>
+    <c-row>
+        <c-col>
+            <c-card [cBorder]="{top: {color: 'danger', width: 3}}" class="mb-3">
+                <c-card-header>
+                    <h5 cModalTitle>Silme İşlemi</h5>
+                </c-card-header>
+                <c-card-body class="modal-scrollable">
+                    <p>
+                        <strong cTextColor="danger">{{ malTypeToDelete?.name }}</strong> tipini silmek istiyor musunuz?
+                    </p>
+                </c-card-body>
+                <c-card-footer>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button cButton color="danger" variant="outline" (click)="confirmDelete()">Evet</button>
+                        <button cButton color="secondary" variant="outline" (click)="cancelDelete()">Hayır</button>
+                    </div>
+                </c-card-footer>
+            </c-card>
+        </c-col>
+    </c-row>
+</c-modal>
 
 <ng-template #MalTypeTbl>
     <table [hover]="true" [responsive]="true" [striped]="true" align="middle" cTable class="mb-0 border">
@@ -35,7 +61,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let malType of malTypes; trackBy: trackById"
-                [ngClass]="{ 'selected': selectedMalType === malType.id }" (click)="selectMalType(malType)">
+                [cTableColor]="selectedMalType === malType.id ? 'warning' : ''" (click)="selectMalType(malType)">
                 <td class="text-center">
                     <c-avatar [size]="'md'" [src]="malType.url" status="success"></c-avatar>
                 </td>
