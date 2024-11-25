@@ -1,8 +1,8 @@
 import { NgClass, NgFor, NgTemplateOutlet } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AlertModule, AvatarComponent, ButtonModule, CardModule,  FormModule, GridModule, ModalModule, ProgressBarDirective, ProgressComponent,  TableDirective, TableModule, TextColorDirective, UtilitiesModule } from '@coreui/angular';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AlertModule, AvatarComponent, ButtonModule, CardModule, FormModule, GridModule, ModalModule, ProgressBarDirective, ProgressComponent, TableDirective, TableModule, TextColorDirective, UtilitiesModule } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { MalType } from 'src/app/models/mal-type';
 import { MalTypeService } from 'src/app/service/mal-type.service';
@@ -20,20 +20,66 @@ import { MalTypeService } from 'src/app/service/mal-type.service';
   providers: [MalTypeService]
 })
 export class MaterialTypeDefinitionsComponent implements OnInit {
- 
+
   public visible = false;
   malTypes: MalType[] = [];
   selectedMalType?: string | null = null;
-  malTypeToDelete?: MalType | null = null; 
+  malTypeToDelete?: MalType | null = null;
   isDeleteModalVisible: boolean = false;
+  malTypeForm: FormGroup;
+  isEditMode = false;
 
-  constructor(private malTypeService: MalTypeService) { }
+  constructor(private malTypeService: MalTypeService, private formBuilder: FormBuilder) {
+    // Formu başlatıyoruz
+    this.malTypeForm = this.formBuilder.group({
+      id: [''],
+      name: [''],
+      code: [''],
+      amount: [''],
+      description: [''],
+      url: ['']
+    });
+  }
 
   ngOnInit() {
     this.malTypeService.getMalType(0, 10).subscribe((response: any) => {
       this.malTypes = response.items; // Servisten dönen items listesini malTypes'e aktarıyoruz
     })
   }
+
+  editMalType(): void {
+    if (this.selectedMalType) {
+      this.malTypeService.getMalTypeById(this.selectedMalType).subscribe((response: MalType) => {
+        // API'den gelen veriyi forma aktarıyoruz
+        this.malTypeForm.patchValue({
+          id: response.id,
+          name: response.name,
+          code: response.code,
+          amount: response.amount,
+          description: response.description,
+          url: response.url
+        });
+        this.isEditMode = true; // Düzenleme modunu aktif ediyoruz
+      });
+    }
+  }
+
+  saveChanges(): void {
+    if (this.malTypeForm.valid) {
+      // Formun değerlerini JSON string formatında alıyoruz
+      const updatedMalTypeJson: string = JSON.stringify(this.malTypeForm.value);
+      
+      this.malTypeService.updateMalType(this.selectedMalType!, updatedMalTypeJson).subscribe((response) => {
+        console.log('Güncelleme başarılı:', response);
+        // Güncellenen malzeme tipini listeye yansıtıyoruz
+        this.malTypes = this.malTypes.map((malType) =>
+          malType.id === this.selectedMalType ? { ...malType, ...this.malTypeForm.value } : malType
+        );
+        this.isEditMode = false; // Düzenleme modunu kapatıyoruz
+      });
+    }
+  }
+  
 
   selectMalType(malType: MalType): void {
     this.selectedMalType = this.selectedMalType === malType.id ? null : malType.id;

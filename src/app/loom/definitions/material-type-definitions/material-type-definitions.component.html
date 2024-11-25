@@ -11,7 +11,12 @@
                 <c-card-footer>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button cButton color="success" variant="outline">Ekle</button>
-                        <button cButton color="warning" variant="outline">Değiştir</button>
+
+                        <button cButton color="warning" variant="outline" (click)="editMalType()"
+                            [disabled]="!selectedMalType">
+                            Değiştir
+                        </button>
+
                         <button cButton color="danger" variant="outline"
                             (click)="deleteConfirmation(selectedMalType || null)" [disabled]="!selectedMalType">
                             Sil
@@ -23,7 +28,7 @@
     </c-row>
 </c-container>
 
-<c-modal [(visible)]="isDeleteModalVisible" [backdrop]="true"  alignment="center" centered closeable>
+<c-modal [(visible)]="isDeleteModalVisible" [backdrop]="true" alignment="center" centered closeable>
     <c-row>
         <c-col>
             <c-card [cBorder]="{top: {color: 'danger', width: 3}}" class="mb-3">
@@ -45,6 +50,49 @@
         </c-col>
     </c-row>
 </c-modal>
+
+<c-modal [(visible)]="isEditMode" [backdrop]="true" alignment="center" centered closeable>
+    <c-row>
+      <c-col>
+        <c-card [cBorder]="{top: {color: 'primary', width: 3}}" class="mb-3">
+          <c-card-header>
+            <h5 cModalTitle>Malzeme Tipi Düzenleme</h5>
+          </c-card-header>
+          <c-card-body class="modal-scrollable">
+            <form [formGroup]="malTypeForm">
+              <div class="mb-3">
+                <label for="name" class="form-label">Tip Adı</label>
+                <input type="text" id="name" class="form-control" formControlName="name" />
+              </div>
+              <div class="mb-3">
+                <label for="code" class="form-label">Tip Kodu</label>
+                <input type="text" id="code" class="form-control" formControlName="code" />
+              </div>
+              <div class="mb-3">
+                <label for="amount" class="form-label">Kullanım Miktarı</label>
+                <input type="number" id="amount" class="form-control" formControlName="amount" />
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Açıklama</label>
+                <textarea id="description" class="form-control" formControlName="description"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="url" class="form-label">URL</label>
+                <input type="text" id="url" class="form-control" formControlName="url" />
+              </div>
+            </form>
+          </c-card-body>
+          <c-card-footer>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button cButton color="success" variant="outline" (click)="saveChanges()">Kaydet</button>
+              <button cButton color="secondary" variant="outline" (click)="isEditMode = false">İptal</button>
+            </div>
+          </c-card-footer>
+        </c-card>
+      </c-col>
+    </c-row>
+  </c-modal>
+
 
 <ng-template #MalTypeTbl>
     <table [hover]="true" [responsive]="true" [striped]="true" align="middle" cTable class="mb-0 border">
