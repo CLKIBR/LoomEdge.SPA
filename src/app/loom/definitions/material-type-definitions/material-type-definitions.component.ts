@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertModule, AvatarComponent, ButtonModule, CardModule, FormModule, GridModule, ModalModule, ProgressBarDirective, ProgressComponent, TableDirective, TableModule, TextColorDirective, UtilitiesModule } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
+import { AppComponent } from 'src/app/app.component';
 import { MalType } from 'src/app/models/mal-type';
 import { MalTypeService } from 'src/app/service/mal-type.service';
 
@@ -16,8 +17,8 @@ import { MalTypeService } from 'src/app/service/mal-type.service';
     UtilitiesModule, AvatarComponent, ProgressComponent, HttpClientModule,
     TextColorDirective, IconDirective, ReactiveFormsModule, ProgressBarDirective,
     ProgressComponent, TableDirective, ModalModule
-    , ButtonModule, NgTemplateOutlet, NgFor,NgIf,FormsModule],
-  providers: [MalTypeService,NgModel]
+    , ButtonModule, NgTemplateOutlet, NgFor, NgIf, FormsModule],
+  providers: [MalTypeService, NgModel]
 })
 export class MaterialTypeDefinitionsComponent implements OnInit {
 
@@ -37,6 +38,10 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
   userAnswer: number | null = null;
   isCorrectAnswer = false;
 
+  public filteredData: any[] = []; // Filtrelenmiş veriler
+  public nameFilter: string = ''; // Kullanıcının girdiği name filtresi
+  public codeFilter: string = ''; // Kullanıcının girdiği code filtresi
+
   constructor(private malTypeService: MalTypeService, private formBuilder: FormBuilder) {
     // Formu başlatıyoruz
     this.malTypeForm = this.formBuilder.group({
@@ -50,21 +55,54 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
     this.generateRandomQuestion();
   }
 
+  ngOnInit() {
+    this.loadData();
+
+  }
+
+  loadData(): void {
+    this.malTypeService.getMalType(0, 10).subscribe((response: any) => {
+      this.malTypes = response.items; // Servisten dönen items listesini malTypes'e aktarıyoruz
+      this.filteredData = response.items;
+      this.filterData();
+    })
+  }
+
+  filterData(): void {
+    this.filteredData = this.malTypes.filter(item => {
+      const matchesName = this.nameFilter
+        ? item.name?.toLowerCase().includes(this.nameFilter.toLowerCase())
+        : true;
+
+      const matchesCode = this.codeFilter
+        ? item.code?.toLowerCase().includes(this.codeFilter.toLowerCase())
+        : true;
+
+      return matchesName && matchesCode;
+    });
+  }
+
+  filterClean(): void{
+    this.nameFilter = '';
+    this.codeFilter = '';
+    this.loadData();
+  }
+
   generateRandomQuestion(): void {
     // Random sayılar
     this.randomNumber1 = Math.floor(Math.random() * 10) + 1;
     this.randomNumber2 = Math.floor(Math.random() * 10) + 1;
-  
+
     const operators = ['+', '-', '*', '/'];
     this.randomOperator = operators[Math.floor(Math.random() * operators.length)];
-  
+
     // Çıkarma işlemi için randomNumber1 her zaman randomNumber2'den büyük olmalı
     if (this.randomOperator === '-') {
       if (this.randomNumber1 <= this.randomNumber2) {
         this.randomNumber1 = this.randomNumber2 + Math.floor(Math.random() * 10) + 1;
       }
     }
-  
+
     // Bölme işlemi için randomNumber1 her zaman randomNumber2'den büyük olmalı ve sonuç tam sayı olmalı
     if (this.randomOperator === '/') {
       let isValidDivision = false;
@@ -80,7 +118,7 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
         }
       }
     }
-  
+
     // İşlem sonucu hesaplama
     switch (this.randomOperator) {
       case '+':
@@ -97,7 +135,7 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
         break;
     }
   }
-  
+
 
   checkAnswer(): void {
     if (this.userAnswer !== null) {
@@ -126,19 +164,13 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
   cancelDelete(): void {
     this.isDeleteModalVisible = false; // Modal'ı kapat
     this.malTypeToDelete = null; // Silme işlemini iptal et
-    
+
   }
 
   resetModal(): void {
     this.userAnswer = null;
     this.isCorrectAnswer = false;
     this.generateRandomQuestion();
-  }
-
-  ngOnInit() {
-    this.malTypeService.getMalType(0, 10).subscribe((response: any) => {
-      this.malTypes = response.items; // Servisten dönen items listesini malTypes'e aktarıyoruz
-    })
   }
 
   onSubmit() {

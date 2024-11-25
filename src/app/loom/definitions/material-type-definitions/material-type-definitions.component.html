@@ -1,9 +1,26 @@
 <c-container breakpoint="xxl">
     <c-row>
         <c-col>
-            <c-card [cBorder]="{top: {color: 'warning', width: 3}}" class="mb-3">
+            <c-card [cBorder]="{top: {color: 'warning', width: 5}}" class="mb-3">
+
                 <c-card-header>
                     <h5 cModalTitle>Malzeme Tip Tanımı</h5>
+                    <hr />
+                    <form cForm>
+                        <div class="d-grid gap-2 d-flex float-start mb-2">
+                            <div>
+                                <input cFormControl type="text" name="nameFilter" [(ngModel)]="nameFilter"
+                                    (ngModelChange)="filterData()" placeholder="Tip Adı">
+                            </div>
+                            <div>
+                                <input cFormControl type="text" name="codeFilter" [(ngModel)]="codeFilter"
+                                    (ngModelChange)="filterData()" placeholder="Tip Kodu">
+                            </div>
+                            <div>
+                                <button cButton color="info" variant="outline" (click)="filterClean()">Temizle</button>
+                            </div>
+                        </div>
+                    </form>
                 </c-card-header>
                 <c-card-body class="modal-scrollable">
                     <ng-container *ngTemplateOutlet="MalTypeTbl"></ng-container>
@@ -32,7 +49,7 @@
 <c-modal [(visible)]="isDeleteModalVisible" [backdrop]="true" alignment="center" centered closeable>
     <c-row>
         <c-col>
-            <c-card [cBorder]="{top: {color: 'danger', width: 3}}" class="mb-3">
+            <c-card [cBorder]="{top: {color: 'danger', width: 5}}" class="mb-3">
                 <c-card-header>
                     <h5 cModalTitle>Silme İşlemi</h5>
                 </c-card-header>
@@ -67,7 +84,7 @@
 <c-modal [(visible)]="isEditMode" [backdrop]="true" alignment="center" centered closeable>
     <c-row>
         <c-col>
-            <c-card [cBorder]="{top: {color: 'warning', width: 3}}" class="mb-3">
+            <c-card [cBorder]="{top: {color: 'warning', width: 5}}" class="mb-3">
                 <c-card-header>
                     <h5 cModalTitle>Malzeme Tipi Düzenleme</h5>
                 </c-card-header>
@@ -130,7 +147,7 @@
 <c-modal [(visible)]="visible" [backdrop]="true" alignment="center" centered closeable>
     <c-row>
         <c-col>
-            <c-card [cBorder]="{ top: { color: 'success', width: 3 } }" class="mb-3">
+            <c-card [cBorder]="{ top: { color: 'success', width: 5 } }" class="mb-3">
                 <c-card-header>
                     <h5 cModalTitle>Yeni Malzeme Tipi Ekle</h5>
                 </c-card-header>
@@ -204,7 +221,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let malType of malTypes; trackBy: trackById"
+            <tr *ngFor="let malType of filteredData; trackBy: trackById"
                 [cTableColor]="selectedMalType === malType.id ? 'warning' : ''" (click)="selectMalType(malType)">
                 <td class="text-center">
                     <c-avatar [size]="'md'" [src]="malType.url" status="success"></c-avatar>
