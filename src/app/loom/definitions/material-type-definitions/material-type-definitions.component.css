@@ -2,3 +2,8 @@
     max-height: 445px;
     overflow-y: auto;
 }
+
+.error-message {
+    font-size: 12px; 
+    margin-top: 5px; 
+  }
