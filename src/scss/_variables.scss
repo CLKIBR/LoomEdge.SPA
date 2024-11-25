@@ -3,3 +3,15 @@
 // If you want to customize your project please add your variables below.
 
 $enable-deprecation-messages: false !default;
+
+$sidebar-nav-icon-width: 24px;
+$sidebar-nav-icon-height: 24px;
+$sidebar-nav-icon-font-size: 16px;
+$sidebar-nav-link-icon-color: #ffc107;
+
+:root {
+  --cui-sidebar-nav-icon-width: #{$sidebar-nav-icon-width};
+  --cui-sidebar-nav-icon-height: #{$sidebar-nav-icon-height};
+  --cui-sidebar-nav-icon-font-size: #{$sidebar-nav-icon-font-size};
+  --cui-sidebar-nav-link-icon-color: #{$sidebar-nav-link-icon-color};
+}

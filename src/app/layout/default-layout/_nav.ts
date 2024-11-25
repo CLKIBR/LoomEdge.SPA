@@ -1,5 +1,6 @@
 import { INavData } from '@coreui/angular';
 
+
 export const navItems: INavData[] = [
   {
     name: 'Dashboard',
@@ -32,7 +33,7 @@ export const navItems: INavData[] = [
   {
     name: 'Stok İşlemleri',
     url: '/stock_transactions',
-    iconComponent: { name: 'cil-puzzle' },
+    iconComponent: { name: 'cil-layers' },
     children: [
       {
         name: 'Giriş',
@@ -54,7 +55,7 @@ export const navItems: INavData[] = [
   {
     name: 'Sipariş İşlemleri',
     url: '/order_transactions',
-    iconComponent: { name: 'cil-cursor' },
+    iconComponent: { name: 'cil-basket' },
     children: [
       {
         name: 'Siparişler',
@@ -103,7 +104,7 @@ export const navItems: INavData[] = [
   {
     name: 'Yönetim',
     url: '/management',
-    iconComponent: { name: 'cil-notes' },
+    iconComponent: { name: 'cil-user-follow' },
     children: [
       {
         name: 'Kullanıcı Tanımla',
@@ -129,7 +130,7 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Tanımlamalar',
-    iconComponent: { name: 'cil-star' },
+    iconComponent: { name: 'cil-applications-settings' },
     url: '/definitions',
     children: [
       {

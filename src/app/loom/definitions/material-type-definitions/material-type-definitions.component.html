@@ -1,20 +1,3 @@
-<!-- <c-modal alignment="center" size="xl" [transition]="false" class="position-static d-block">
-    <c-modal-header>
-        <h5 cModalTitle>Malzeme Tip Tanımı</h5>
-        <button cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body class="modal-scrollable">
-        <ng-container *ngTemplateOutlet="MalTypeTbl"></ng-container>
-    </c-modal-body>
-    <c-modal-footer>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button cButton color="success" variant="outline">Ekle</button>
-            <button cButton color="warning" variant="outline">Değiştir</button>
-            <button cButton color="danger" variant="outline">Sil</button>
-        </div>
-    </c-modal-footer>
-</c-modal> -->
-
 <c-container breakpoint="xxl">
     <c-row>
         <c-col>
@@ -29,7 +12,7 @@
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button cButton color="success" variant="outline">Ekle</button>
                         <button cButton color="warning" variant="outline">Değiştir</button>
-                        <button cButton color="danger" variant="outline">Sil</button>
+                        <button cButton color="danger" variant="outline" (click)="deleteSelectedMalType()">Sil</button>
                     </div>
                 </c-card-footer>
             </c-card>
@@ -41,7 +24,7 @@
     <table [hover]="true" [responsive]="true" [striped]="true" align="middle" cTable class="mb-0 border">
         <thead class="text-nowrap text-truncate">
             <tr>
-                <th class="bg-body-tertiary text-center ">
+                <th class="bg-body-tertiary text-center">
                     <svg cIcon name="cilPeople"></svg>
                 </th>
                 <th class="bg-body-tertiary">Tip Adı</th>
@@ -51,10 +34,10 @@
             </tr>
         </thead>
         <tbody>
-            @for (malType of malTypes; track malType.name; let i = $index) {
-            <tr>
+            <tr *ngFor="let malType of malTypes; trackBy: trackById"
+                [ngClass]="{ 'selected': selectedMalType === malType.id }" (click)="selectMalType(malType)">
                 <td class="text-center">
-                    <c-avatar [size]="'md'" src='{{malType.url}}' status='success' />
+                    <c-avatar [size]="'md'" [src]="malType.url" status="success"></c-avatar>
                 </td>
                 <td>
                     <div class="fw-semibold">{{ malType.name }}</div>
@@ -73,20 +56,16 @@
                             <strong>{{malType.amount}}%</strong>
                         </div>
                         <div class="float-end ms-1 text-nowrap">
-                            <small class="text-body-secondary">
-                                Depo Kullanım Miktarı
-                            </small>
+                            <small class="text-body-secondary">Depo Kullanım Miktarı</small>
                         </div>
                     </div>
-                    <c-progress thin [value]="malType.amount" color="success" aria-label="Usage" />
+                    <c-progress thin [value]="malType.amount" color="success" aria-label="Usage"></c-progress>
                 </td>
-
                 <td>
                     <div class="small text-body-secondary">Kullanımda</div>
-                    <div class=" text-nowrap">{{malType.description}}</div>
+                    <div class="text-nowrap">{{ malType.description }}</div>
                 </td>
             </tr>
-            }
         </tbody>
     </table>
 </ng-template>

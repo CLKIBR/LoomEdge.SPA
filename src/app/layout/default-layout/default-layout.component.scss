@@ -6,8 +6,14 @@
     --scrollbar-thumb-hover-color: var(--cui-gray-400, #999);
     --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
   }
-}
 
+  .ng-sidebar {
+    width: var(--cui-sidebar-nav-icon-width);
+    height: var(--cui-sidebar-nav-icon-height);
+    font-size: var(--cui-sidebar-nav-icon-font-size);
+    color: var(--cui-sidebar-nav-link-icon-color);
+  }
+}
 // ng-scrollbar css variables
 // .cui-scrollbar {
 //  --scrollbar-border-radius: 7px;
