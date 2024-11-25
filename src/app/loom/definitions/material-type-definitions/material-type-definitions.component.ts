@@ -76,6 +76,7 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
           malType.id === this.selectedMalType ? { ...malType, ...this.malTypeForm.value } : malType
         );
         this.isEditMode = false; // Düzenleme modunu kapatıyoruz
+        this.malTypeForm.reset();
       });
     }
   }
@@ -151,7 +152,7 @@ export class MaterialTypeDefinitionsComponent implements OnInit {
   openAddMalTypeModal(): void {
     this.isEditMode = false; // Düzenleme modu değil
     this.malTypeForm.reset(); // Formu sıfırlıyoruz
-    this.visible = true; // Modal'ı göster
+    
   }
 
   toggleNewMalTypeModal() {

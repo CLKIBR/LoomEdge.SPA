@@ -54,7 +54,7 @@
 <c-modal [(visible)]="isEditMode" [backdrop]="true" alignment="center" centered closeable>
     <c-row>
       <c-col>
-        <c-card [cBorder]="{top: {color: 'primary', width: 3}}" class="mb-3">
+        <c-card [cBorder]="{top: {color: 'warning', width: 3}}" class="mb-3">
           <c-card-header>
             <h5 cModalTitle>Malzeme Tipi Düzenleme</h5>
           </c-card-header>
@@ -85,7 +85,7 @@
           <c-card-footer>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button cButton color="success" variant="outline" (click)="saveChanges()">Kaydet</button>
-              <button cButton color="secondary" variant="outline" (click)="isEditMode = false">İptal</button>
+              <button cButton color="secondary" variant="outline" (click)="openAddMalTypeModal()">İptal</button>
             </div>
           </c-card-footer>
         </c-card>
@@ -96,7 +96,7 @@
   <c-modal [(visible)]="visible" [backdrop]="true" alignment="center" centered closeable>
     <c-row>
       <c-col>
-        <c-card [cBorder]="{ top: { color: 'primary', width: 3 } }" class="mb-3">
+        <c-card [cBorder]="{ top: { color: 'success', width: 3 } }" class="mb-3">
           <c-card-header>
             <h5 cModalTitle>Yeni Malzeme Tipi Ekle</h5>
           </c-card-header>
